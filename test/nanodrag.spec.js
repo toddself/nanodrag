@@ -16,6 +16,8 @@ function createTouch (x, y, el, type) {
     identifier: Date.now(),
     clientX: x,
     clientY: y,
+    pageX: x,
+    pageY: y,
     target: el
   })
 
@@ -38,9 +40,9 @@ test('what a drag', (t) => {
     t.ok(nd._active, 'is active')
   })
   const evt = createTouch(2, 2, el, 'start')
-  document.body.dispatchEvent(evt)
+  el.dispatchEvent(evt)
   nd.close()
-  document.body.dispatchEvent(evt)
+  el.dispatchEvent(evt)
   t.ok(!nd._active, 'not active')
   cleanup(el)
 })
