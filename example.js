@@ -1,4 +1,5 @@
-const Nanodrag = require('./')
+const Nanodrag = require('./nanodrag')
+
 if (typeof window !== 'undefined') {
   const d = document.createElement('div')
   d.style.cssText = 'border: 1px solid black; position: absolute; top: 100px; left: 100px; width: 200px; height: 200px;'
@@ -6,6 +7,7 @@ if (typeof window !== 'undefined') {
   const n = new Nanodrag(d)
   let offsetX = 0
   let offsetY = 0
+
   n.on('start', (data) => {
     const rect = d.getBoundingClientRect()
     offsetY = rect.y - data.start.y

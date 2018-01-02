@@ -2,13 +2,21 @@ const window = require('global/window')
 const document = require('global/document')
 const Nanobus = require('nanobus')
 
-const events = ['touchstart', 'touchend', 'touchmove']
+const events = {
+  touchstart: 'start',
+  touchend: 'end',
+  touchmove: 'move',
+  mousedown: 'start',
+  mouseup: 'end',
+  mousemove: 'move'
+}
+
 const raf = window.requestAnimationFrame || window.setTimeout
 
-function Nanoswipe (targetEl) {
-  if (!(this instanceof Nanoswipe)) return new Nanoswipe(targetEl)
+function Nanodrag (targetEl) {
+  if (!(this instanceof Nanodrag)) return new Nanodrag(targetEl)
   Nanobus.call(this)
-  if (typeof target === 'string') {
+  if (typeof targetEl === 'string') {
     targetEl = document.querySelector(targetEl)
   }
 
@@ -24,24 +32,39 @@ function Nanoswipe (targetEl) {
   this._currentY = null
   this._direction = {x: '', y: ''}
 
-  events.forEach((evt) => this.targetEl.addEventListener(evt, this))
+  Object.keys(events).forEach((evt) => this.targetEl.addEventListener(evt, this))
 }
 
-Nanoswipe.prototype = Object.create(Nanobus.prototype)
+Nanodrag.prototype = Object.create(Nanobus.prototype)
 
-Nanoswipe.prototype.handleEvent = function (evt) {
-  const activeEl = evt.touches[0]
-  this[`on${evt.type}`](evt, activeEl)
+Nanodrag.prototype.handleEvent = function (evt) {
+  const evtType = events[evt.type]
+  const pointerData = this._getPointerData(evt)
+  console.log('handling', evtType, pointerData)
+  this[`on${evtType}`](evt, pointerData)
 }
 
-Nanoswipe.prototype.ontouchstart = function (evt, activeEl) {
-  this._startX = activeEl.pageX
-  this._startY = activeEl.pageY
+Nanodrag.prototype._getPointerData = function (evt) {
+  if (evt.touches && evt.touches.length > 0) {
+    return evt.touches[0]
+  }
+
+  const data = {
+    pageX: evt.screenX + evt.currentTarget.scrollLeft,
+    pageY: evt.screenY + evt.currentTarget.scrollTop
+  }
+
+  return data
+}
+
+Nanodrag.prototype.onstart = function (evt, pointerData) {
+  this._startX = pointerData.pageX
+  this._startY = pointerData.pageY
   this._active = true
   this.emit('start', {start: {x: this._startX, y: this._startY}})
 }
 
-Nanoswipe.prototype.ontouchend = function (evt) {
+Nanodrag.prototype.onend = function (evt) {
   const data = {
     start: {
       x: this._startX,
@@ -56,12 +79,12 @@ Nanoswipe.prototype.ontouchend = function (evt) {
   this.emit('end', data)
 }
 
-Nanoswipe.prototype.ontouchmove = function (evt, activeEl) {
+Nanodrag.prototype.onmove = function (evt, pointerData) {
   if (this._active) {
     evt.preventDefault()
     raf(() => {
-      this._currentX = activeEl.pageX
-      this._currentY = activeEl.pageY
+      this._currentX = pointerData.pageX
+      this._currentY = pointerData.pageY
       const direction = this._getSwipeDirection()
       const data = {
         direction,
@@ -78,13 +101,13 @@ Nanoswipe.prototype.ontouchmove = function (evt, activeEl) {
   }
 }
 
-Nanoswipe.prototype.close = function () {
-  events.forEach((evt) => this.targetEl.removeEventListener(evt, this))
+Nanodrag.prototype.close = function () {
+  Object.keys(events).forEach((evt) => this.targetEl.removeEventListener(evt, this))
   this.removeAllListeners()
   this._active = false
 }
 
-Nanoswipe.prototype._getSwipeDirection = function () {
+Nanodrag.prototype._getSwipeDirection = function () {
   const diffX = this._startX - this._currentX
   const diffY = this._startY - this._currentY
   const x = diffX > -1 ? 'left' : diffX < 0 ? 'right' : ''
@@ -92,4 +115,4 @@ Nanoswipe.prototype._getSwipeDirection = function () {
   return {x, y}
 }
 
-module.exports = Nanoswipe
+module.exports = Nanodrag

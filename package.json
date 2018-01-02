@@ -2,18 +2,26 @@
   "name": "nanodrag",
   "version": "1.0.0",
   "description": "A small touchdrag events library",
-  "main": "nanodrag.js",
+  "main": "dist/nanodrag.min.js",
   "scripts": {
     "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
-    "build": "bankai build .",
-    "start": "bankai start test.js",
-    "dep": "dependency-check . && dependency-check . --no-dev --unused"
+    "build": "npm test && mkdir -p test && browserify -p tinyify > dist/nanodrag.min.js",
+    "start": "bankai start example.js",
+    "dep": "dependency-check . --entry=nanodrag.js && dependency-check . --entry=nanodrag.js --no-dev --unused"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toddself/nanodrag.git"
   },
-  "keywords": ["drag", "touchevents", "touchdown", "touchstart", "touchend", "swipe", "touchdrag"],
+  "keywords": [
+    "drag",
+    "touchevents",
+    "touchdown",
+    "touchstart",
+    "touchend",
+    "swipe",
+    "touchdrag"
+  ],
   "author": "Todd Kennedy <todd@selfassembled.org>",
   "license": "Apache-2.0",
   "bugs": {
@@ -30,6 +38,7 @@
     "dependency-check": "^2.9.2",
     "standard": "^10.0.3",
     "tape": "^4.8.0",
-    "tape-run": "^3.0.1"
+    "tape-run": "^3.0.1",
+    "tinyify": "^2.4.0"
   }
 }
