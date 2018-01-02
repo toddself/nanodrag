@@ -5,7 +5,8 @@ const Nanobus = require('nanobus')
 const events = ['touchstart', 'touchend', 'touchmove']
 const raf = window.requestAnimationFrame || window.setTimeout
 
-function Nanoswipe (targetEl, config) {
+function Nanoswipe (targetEl) {
+  if (!(this instanceof Nanoswipe)) return new Nanoswipe(targetEl)
   Nanobus.call(this)
   if (typeof target === 'string') {
     targetEl = document.querySelector(targetEl)
@@ -86,7 +87,7 @@ Nanoswipe.prototype.close = function () {
 Nanoswipe.prototype._getSwipeDirection = function () {
   const diffX = this._startX - this._currentX
   const diffY = this._startY - this._currentY
-  const x = diffX > -1 ? 'right' : diffX < 0 ? 'left' : ''
+  const x = diffX > -1 ? 'left' : diffX < 0 ? 'right' : ''
   const y = diffY > -1 ? 'up' : diffY < 0 ? 'down' : ''
   return {x, y}
 }

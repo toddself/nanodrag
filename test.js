@@ -15,5 +15,6 @@ if (typeof window !== 'undefined') {
   n.on('move', (data) => {
     d.style.top = `${data.current.y + offsetY}px`
     d.style.left = `${data.current.x + offsetX}px`
+    console.log('dragging', data.direction.x, data.direction.y)
   })
 }

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
     "build": "bankai build .",
-    "start": "bankai start test.js"
+    "start": "bankai start test.js",
+    "dep": "dependency-check . && dependency-check . --no-dev --unused"
   },
   "repository": {
     "type": "git",
