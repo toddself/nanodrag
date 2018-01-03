@@ -44,6 +44,7 @@ function Nanodrag (targetEl, options) {
   this._trackingDelay = options.trackingDelay || defaultTrackingDelay
   this._leaveTimer = null
   this.preventDefault = true
+  this._touchTriggered = false
 
   Object.keys(controlEvents).forEach((evt) => this.targetEl.addEventListener(evt, this, {passive: true}))
 }
@@ -54,6 +55,16 @@ Nanodrag.prototype.handleEvent = function (evt) {
   const evtType = controlEvents[evt.type] || moveEvents[evt.type]
   const pointerData = this._getPointerData(evt)
   const evtMethod = (this[`on${evtType}`] || noop).bind(this)
+
+  if (evt.type.startsWith('touch')) {
+    this._touchTriggered = true
+  }
+
+  // iOS fires both `mousedown` and `touchstart`, so if we've gotten a touch
+  // event, we ignore mouse events
+  if (this._touchTriggered && evt.type.startsWith('mouse')) {
+    return
+  }
 
   if (evt.type === 'mouseleave' && this._active) {
     this._leaveTimer = window.setTimeout(() => evtMethod(evt, pointerData), this._trackingDelay)
@@ -80,9 +91,11 @@ Nanodrag.prototype._getPointerData = function (evt) {
 }
 
 Nanodrag.prototype.onstart = function (evt, pointerData) {
+  this._active = true
   this._startX = pointerData.pageX
   this._startY = pointerData.pageY
-  this._active = true
+  this._currentX = pointerData.pageX
+  this._currentY = pointerData.pageY
   Object.keys(moveEvents).forEach((evt) => this.targetEl.addEventListener(evt, this))
   this.emit('start', {start: {x: this._startX, y: this._startY}})
 }
