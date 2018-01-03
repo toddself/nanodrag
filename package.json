@@ -5,7 +5,7 @@
   "main": "dist/nanodrag.min.js",
   "scripts": {
     "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
-    "build": "npm test && mkdir -p test && browserify -p tinyify > dist/nanodrag.min.js",
+    "build": "npm test && mkdir -p dist || exit 0 && browserify nanodrag.js -p tinyify > dist/nanodrag.min.js",
     "start": "bankai start example.js",
     "dep": "dependency-check . --entry=nanodrag.js && dependency-check . --entry=nanodrag.js --no-dev --unused",
     "prepublish": "npm run build"
