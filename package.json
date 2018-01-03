@@ -2,7 +2,7 @@
   "name": "nanodrag",
   "version": "1.0.3",
   "description": "A small touchdrag events library",
-  "main": "dist/nanodrag.min.js",
+  "main": "nanodrag.js",
   "scripts": {
     "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
     "build": "npm test && mkdir -p dist || exit 0 && browserify nanodrag.js -p tinyify > dist/nanodrag.min.js",
