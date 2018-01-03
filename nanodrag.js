@@ -43,6 +43,7 @@ function Nanodrag (targetEl, options) {
   this._direction = {x: '', y: ''}
   this._trackingDelay = options.trackingDelay || defaultTrackingDelay
   this._leaveTimer = null
+  this.preventDefault = true
 
   Object.keys(controlEvents).forEach((evt) => this.targetEl.addEventListener(evt, this, {passive: true}))
 }
@@ -123,7 +124,7 @@ Nanodrag.prototype.onmove = function (evt, pointerData, force) {
   }
 
   if (this._active) {
-    evt.preventDefault()
+    if (this.preventDefault) evt.preventDefault()
     raf(update)
   }
 }
