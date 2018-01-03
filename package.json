@@ -1,6 +1,6 @@
 {
   "name": "nanodrag",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A small touchdrag events library",
   "main": "dist/nanodrag.min.js",
   "scripts": {
