@@ -7,7 +7,8 @@
     "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
     "build": "npm test && mkdir -p test && browserify -p tinyify > dist/nanodrag.min.js",
     "start": "bankai start example.js",
-    "dep": "dependency-check . --entry=nanodrag.js && dependency-check . --entry=nanodrag.js --no-dev --unused"
+    "dep": "dependency-check . --entry=nanodrag.js && dependency-check . --entry=nanodrag.js --no-dev --unused",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
