@@ -42,6 +42,7 @@ function Nanodrag (targetEl, options) {
   this._currentY = null
   this._direction = {x: '', y: ''}
   this._trackingDelay = options.trackingDelay || defaultTrackingDelay
+  this._passiveMove = options.passive || false
   this._leaveTimer = null
   this.preventDefault = true
   this._touchTriggered = false
@@ -96,7 +97,9 @@ Nanodrag.prototype.onstart = function (evt, pointerData) {
   this._startY = pointerData.pageY
   this._currentX = pointerData.pageX
   this._currentY = pointerData.pageY
-  Object.keys(moveEvents).forEach((evt) => this.targetEl.addEventListener(evt, this))
+  Object.keys(moveEvents).forEach((evt) => {
+    this.targetEl.addEventListener(evt, this, {passive: this._passiveMove})
+  })
   this.emit('start', {start: {x: this._startX, y: this._startY}})
 }
 
@@ -137,7 +140,7 @@ Nanodrag.prototype.onmove = function (evt, pointerData, force) {
   }
 
   if (this._active) {
-    if (this.preventDefault) evt.preventDefault()
+    if (!this._passiveMove && this.preventDefault) evt.preventDefault()
     raf(update)
   }
 }

@@ -28,6 +28,32 @@ nd.close()
 
 ## API
 
+### Properties
+
+#### preventDefault:boolean
+If this is set to true, it will call `event.preventDefault()` on the event
+provided by the `touchmove` or `mousemove` event. This property only works
+if you did **not** set `{passive: true}` in the constructor.
+
+Examples:
+
+This will attach the listener in passive mode and prevent the calling of
+`event.preventDefault` regardless of what value `Nanodrag.preventDefault` is. 
+
+```js
+const nd = new Nanodrag(element, {passive: true})
+```
+
+This will attach the listener in active mode allowing you decide to call
+`event.preventDefault` at a later time.
+
+```js
+const nd = new Nanodrag(element)
+nd.on('start', () => {
+  nd.preventDefault = false
+})
+```
+
 ### Methods
 
 #### new Nanodrag(selector:string|element:HTMLElement, options?:object(key:any)):nanodrag
@@ -36,8 +62,10 @@ Create a new nanodrag instance. You can either pass in a valid selector for
 an instance of a [nanobus](https://github.com/choojs/nanobus) object.
 
 **options**
-* `trackingDelay`:number - the delay (in nanoseconds) to wait before turning off
+* `trackingDelay`?:number - the delay (in nanoseconds) to wait before turning off
     the tracking mode if the mouse escapes the tracked element. Default: 300
+* `passive`?:boolean - attach `touchmove` and `mousemove` as passive listeners.
+    This will prevent calling `event.preventDefault` on move events.
 
 #### nanodrag#on(event:string, listener:function)
 Provide a function to invoke when the specified event is triggered
