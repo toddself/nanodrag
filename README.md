@@ -30,10 +30,14 @@ nd.close()
 
 ### Methods
 
-#### new Nanodrag(selector:string|element:HTMLElement):nanodrag
+#### new Nanodrag(selector:string|element:HTMLElement, options?:object(key:any)):nanodrag
 Create a new nanodrag instance. You can either pass in a valid selector for
 `.querySelector` or a reference to an HTML element. A nanodrag instance is also
 an instance of a [nanobus](https://github.com/choojs/nanobus) object.
+
+**options**
+* `trackingDelay`:number - the delay (in nanoseconds) to wait before turning off
+    the tracking mode if the mouse escapes the tracked element. Default: 300
 
 #### nanodrag#on(event:string, listener:function)
 Provide a function to invoke when the specified event is triggered
@@ -61,35 +65,35 @@ reporting any move events
 Triggered when a touch start or mouse down event occur on the nanodrag element. 
 
 **data**
-* start:object
-    * x:number - the x coordinate of the touch instrument or mouse
-    * y:number - the y coordinate of the touch instrument or mouse
+* `start`:object
+    * `x`:number - the x coordinate of the touch instrument or mouse
+    * `y`:number - the y coordinate of the touch instrument or mouse
 
 #### move
 Triggered when the mouse or touch instrument is moved after being started. For
 mouse-like devices, this means the button must be actively held down
 
 **data**
-* start:object
-    * x:number - the starting x coordinate of the touch instrument or mouse
-    * y:number - the starting y coordinate of the touch instrument or mouse
-* current:object
-    * x:number - the current x coordinate of the touch instrument or mouse
-    * y:number - the current y coordinate of the touch instrument or mouse
-* direction:object
-    * x:string - either 'left' or 'right
-    * y:string - either 'up' or 'down
+* `start`:object
+    * `x`:number - the starting x coordinate of the touch instrument or mouse
+    * `y`:number - the starting y coordinate of the touch instrument or mouse
+* `current`:object
+    * `x`:number - the current x coordinate of the touch instrument or mouse
+    * `y`:number - the current y coordinate of the touch instrument or mouse
+* `direction`:object
+    * `x`:string - either 'left' or 'right
+    * `y`:string - either 'up' or 'down
 
 #### end
 Triggered when the touchend or mouseup event occurs.
 
 **data**
-* start:object
-    * x:number - the starting x coordinate of the touch instrument or mouse
-    * y:number - the starting y coordinate of the touch instrument or mouse
-* end:object
-    * x:number - the end x coordinate of the touch instrument or mouse
-    * y:number - the end y coordinate of the touch instrument or mouse
+* `start`:object
+    * `x`:number - the starting x coordinate of the touch instrument or mouse
+    * `y`:number - the starting y coordinate of the touch instrument or mouse
+* `end`:object
+    * `x`:number - the end x coordinate of the touch instrument or mouse
+    * `y`:number - the end y coordinate of the touch instrument or mouse
 
 
 
